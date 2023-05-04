@@ -1,0 +1,33 @@
+<% layout("layout.eta") %>
+
+    <H1>
+        Liste des MANGAS
+    </H1>
+    <div>
+        <% for (let i=0 ; i<it.products.length ; i++) { %>
+            <% let product=it.products[i]; %>
+                <div>
+                    <h2>
+                        <%= product.name %>
+                    </h2>
+                    <div>
+                        <img src="./img/coffret-one-piece-east-blue-tome-1-a-12.jpg" alt="">
+                    </div>
+                    <div>
+                        <p>
+                            <%= product.description %>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <%= product.price %> €
+                        </p>
+                    </div>
+                    <a href="/details/<%= product.id %>">Voir le produit</a>
+
+                    <% } %>
+                </div>
+    </div>
+    </body>
+
+    </html>

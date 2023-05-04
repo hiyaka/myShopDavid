@@ -1,0 +1,55 @@
+<script setup>
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
+let products = ref([]);
+async function loadProducts() {
+    const response = await fetch('http://localhost:8000/office/products');
+    products.value = await response.json()
+    console.log(response);
+}
+loadProducts()
+
+</script>
+
+<template>
+    <div>
+        <router-link :to="'/products/edit/0'">Ajouter un manga</router-link>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Liste des mangas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="product in products" :key="product.id">
+                <td>
+                    {{ product.name }}
+                </td>
+                <td>
+                    <RouterLink :to="'/products/edit/' + product.id">éditer</RouterLink>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</template>
+
+<style scoped>
+td {
+    border: 1px solid #333;
+}
+
+table {
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #333;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+}
+</style>
+

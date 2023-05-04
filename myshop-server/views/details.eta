@@ -1,0 +1,27 @@
+<% layout("layout.eta") %>
+
+    <% if (it.product) { %>
+        <div>
+            <h1>
+                <%= it.product.name %>
+            </h1>
+        </div>
+        <div>
+            <img src="/img/coffret-one-piece-east-blue-tome-1-a-12.jpg" alt="">
+        </div>
+        <div>
+            <p>
+                <%= it.product.description %>
+            </p>
+        </div>
+        <div>
+            <p>
+                <%= it.product.price %> €
+            </p>
+        </div>
+        <div>
+            <button>Ajouter au panier</button>
+        </div>
+        <% } %>
+
+            </html>
