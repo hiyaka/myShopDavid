@@ -32,7 +32,7 @@ async function saveProduct() {
         body: JSON.stringify(product.value)
     });
 
-    //document.location.href = "/products/list";
+    document.location.href = "/products/list";
 }
 
 </script>

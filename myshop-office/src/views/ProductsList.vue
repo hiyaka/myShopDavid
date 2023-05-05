@@ -9,6 +9,12 @@ async function loadProducts() {
 }
 loadProducts()
 
+async function deleteProduct(id) {
+    await fetch(`http://localhost:8000/office/products/` + id, {
+        method: "DELETE"
+    })
+    loadProducts()
+}
 </script>
 
 <template>
@@ -18,7 +24,11 @@ loadProducts()
     <table>
         <thead>
             <tr>
-                <th colspan="2">Liste des mangas</th>
+                <th colspan="1">nom</th>
+                <th colspan="1">description</th>
+                <th colspan="1">prix</th>
+                <th colspan="2">Gestion</th>
+
             </tr>
         </thead>
         <tbody>
@@ -27,7 +37,16 @@ loadProducts()
                     {{ product.name }}
                 </td>
                 <td>
+                    {{ product.description }}
+                </td>
+                <td>
+                    {{ product.price }}
+                </td>
+                <td>
                     <RouterLink :to="'/products/edit/' + product.id">éditer</RouterLink>
+                </td>
+                <td>
+                    <a href="#" @click=" deleteProduct(product.id)">Supp</a>
                 </td>
             </tr>
         </tbody>
