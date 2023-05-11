@@ -99,6 +99,23 @@ app.delete("/office/products/:id", async function (req, res) {
     await removeProduct(req.params.id)
     res.send({ data: product })
 });
+//////////////////////////////////login///////////////////////////////////////////////
+
+app.post('/office/login', async function (req, res) {
+    try {
+        const { email, password } = req.body;
+        console.log(req.body)
+        const [rows, fields] = await connection.execute('SELECT * FROM users WHERE email = ? AND password = PASSWORD(?)', [email, password]);
+        console.log(rows[0])
+        if (rows.length === 0) return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+        console.log("tata")
+        res.json({ user: rows[0], token: rows[0].token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+});
+
 
 
 app.listen(8000, async function () {

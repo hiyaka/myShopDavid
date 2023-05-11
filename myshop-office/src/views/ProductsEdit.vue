@@ -6,7 +6,7 @@ const id = route.params.id
 
 
 
-let product = ref({})
+let product = ref({ name: "", description: "", price: 0 })
 
 async function loadProduct() {
     const response = await fetch(`http://localhost:8000/office/products/` + id);
