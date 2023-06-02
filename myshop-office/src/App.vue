@@ -17,9 +17,6 @@ function logout() {
           <RouterLink to="/" name="home">Home</RouterLink>
         </li>
         <li>
-          <RouterLink to="/products/list" name="products">Liste des Mangas</RouterLink>
-        </li>
-        <li>
           <RouterLink to="/login" name="login">Login</RouterLink>
         </li>
         <li>

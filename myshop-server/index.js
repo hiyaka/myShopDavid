@@ -126,7 +126,73 @@ app.post('/office/login', async function (req, res) {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
+////////////////////////////////////// Users ////////////////////////////////////////////////
 
+async function loadUser(id) {
+    let user = await connection.query(`SELECT * FROM users where id=?`, [id]);
+    if (user[0].length == 0) return null;
+    return user[0][0];
+}
+async function addUser(user) {
+    let token = uuid.v4();
+    let [inserted] = await connection.query(
+        `INSERT INTO users (name, email, password, token) VALUES (?, ?, PASSWORD(?), ?)`,
+        [user.name, user.email, user.password, token]
+    );
+    return inserted.insertId;
+}
+async function updateUser(id, user) {
+    let sql = `UPDATE users SET name=?, email=?`;
+    let sqlData = [user.name, user.email]
+    if (user.password) {
+        sql = ", password=PASSWORD(?)";
+        sqlData.push(user.password)
+    }
+    sql += " WHERE id=?"
+    sqlData.push(id)
+    await connection.query(sql, sqlData);
+    return id;
+}
+async function removeUser(id) {
+    connection.query(`DELETE FROM users WHERE id=?`, [id]);
+}
+async function loadUsers(where = "1=1", orderBy = "name") {
+    let users = await connection.query(`SELECT * FROM users where ${where} order by ${orderBy}`);
+    return users[0];
+}
+
+app.get("/office/users", checkUser, async function (req, res) {
+    let users = await loadUsers();
+    res.send({ data: users });
+});
+app.get("/office/users/:id", checkUser, async function (req, res) {
+    if (req.params.id == "0") {
+        return res.send({ data: { id: 0, name: "", description: "", price: 0 } })
+    }
+    let user = await loadUser(req.params.id);
+    if (!user) return res.send({ error: "user not found" })
+    // delete user.password;
+    user.password = "";
+    res.send({ data: user })
+});
+app.post("/office/users", checkUser, async function (req, res) {
+    let id = await addUser(req.body)
+    let user = await loadUser(id)
+    res.send({ data: user })
+});
+app.put("/office/users/:id", checkUser, async function (req, res) {
+    let user = await loadUser(req.params.id)
+    if (!user) return res.send({ error: "user not found" })
+    await updateUser(req.params.id, req.body)
+    user = await loadUser(req.params.id)
+    res.send({ data: user })
+});
+app.delete("/office/users/:id", checkUser, async function (req, res) {
+    let user = await loadUser(req.params.id)
+    if (!user) return res.send({ error: "user not found" })
+    await removeUser(req.params.id)
+    res.send({ data: user })
+});
 
 
 app.listen(8000, async function () {
