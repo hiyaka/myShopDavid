@@ -1,9 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { getUserToken } from '/utils'
 let products = ref([]);
 async function loadProducts() {
-    const response = await fetch('http://localhost:8000/office/products');
+    const response = await fetch('http://localhost:8000/office/products', {
+        method: "GET",
+        headers: {
+            'authorization': `Bearer ${getUserToken()}`
+        }
+    });
     products.value = await response.json()
     console.log(response);
 }
@@ -11,7 +17,11 @@ loadProducts()
 
 async function deleteProduct(id) {
     await fetch(`http://localhost:8000/office/products/` + id, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${getUserToken()}`
+        }
     })
     loadProducts()
 }

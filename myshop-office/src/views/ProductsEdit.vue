@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { getUserToken } from '/utils'
 const route = useRoute()
 const id = route.params.id
 
@@ -9,7 +10,11 @@ const id = route.params.id
 let product = ref({ name: "", description: "", price: 0 })
 
 async function loadProduct() {
-    const response = await fetch(`http://localhost:8000/office/products/` + id);
+    const response = await fetch(`http://localhost:8000/office/products/` + id, {
+        headers: {
+            'authorization': `Bearer ${getUserToken()}`
+        }
+    });
     product.value = (await response.json()).product
     console.log(product.value);
 
@@ -27,7 +32,8 @@ async function saveProduct() {
     await fetch(url, {
         method: method,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${getUserToken()}`,
         },
         body: JSON.stringify(product.value)
     });

@@ -1,5 +1,12 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router';
+
+function logout() {
+  localStorage.removeItem('user');
+  document.location.href = "/login";
+}
+
+
 </script>
 
 <template>
@@ -11,6 +18,12 @@ import { RouterLink, RouterView } from 'vue-router'
         </li>
         <li>
           <RouterLink to="/products/list" name="products">Liste des Mangas</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/login" name="login">Login</RouterLink>
+        </li>
+        <li>
+          <a href="javascript:void(0)" @click="logout">Déconnexion</a>
         </li>
       </ul>
     </nav>

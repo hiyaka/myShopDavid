@@ -28,6 +28,17 @@ async function initMySQL() {
 }
 
 // les fonctions de gestion des produits en base de données
+
+
+async function checkUser(req, res, next) {
+    let token = req.headers?.authorization?.split(" ")[1];
+    if (!token) return res.status(403).send("unauthorized");
+    let [user] = await connection.query(`SELECT * FROM users where token like ?`, [token]);
+    if (user.length == 0 || user[0].length == 0) return res.status(403).send("unauthorized");
+    next();
+}
+
+
 async function loadProducts(where = "1=1", orderBy = "name") {
     const [rows, fields] = await connection.query('SELECT * FROM products');
     return rows;
